@@ -1,0 +1,154 @@
+{
+  "name": "easy way to send a mail",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6b921fc0-a310-4703-8686-b6a758783188",
+      "name": "When chat message received",
+      "webhookId": "523540c3-96c7-427e-aa05-1ba5a3bca63e"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful and efficient email assistant with access to the send tool.\nrole is to draft, refine, and send emails behalf of the user. Folky these\nguidelines :\nKeep enails professional and unless instructed other-wise.\n- Ensure correct era—ar, spelling, and tone.\n- Confir• details with the user before sending.\n- Never send an\nSign off ever\nYour goal is to\nemail without explicit approval.\nmail with *karthik*\nmake enil cc—mication senless and efficient.\n1"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "c11eb646-e535-44b8-9a72-162a3cbc796a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        220
+      ],
+      "id": "8f947efd-4346-42b6-970e-bcaf1804e929",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "GHJdjDXRAEls2W3Z",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        220,
+        340
+      ],
+      "id": "681fe612-bca0-4506-87bc-5ef0ea032f28",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        380,
+        220
+      ],
+      "id": "d9915834-7846-492d-9935-8db5b5adb08a",
+      "name": "Gmail",
+      "webhookId": "ae85f92e-3807-472e-9e16-dd0d74bf2572",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "gzwKuSpQLvt9vakJ",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "68e5b949-e4f1-4561-bad3-daeb0cda5c74",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9c9ab4959a11d4c35ac80ae9474eea0ac7e6f36274954254136dff661ca5e00c"
+  },
+  "id": "5NqzfEVbUpuu2UeB",
+  "tags": []
+}
